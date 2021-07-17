@@ -50,7 +50,7 @@ read -p 'Hostname: ' hostname
 hostnamectl set-hostname $hostname
 
 # Add user and enable user services
-chroot useradd -d $home -s /usr/bin/fish -G wheel $user
+chroot useradd -k /skel -m -d $home -s /usr/bin/fish -G wheel $user
 chroot passwd $user
 echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
 chroot systemctl --machine $user@.host --user enable \
@@ -63,7 +63,7 @@ usrdo rm -r $home/{.git,install.sh}
 # Install yay
 chroot git clone https://aur.archlinux.org/yay.git
 arch-chroot /mnt bash -c 'cd /yay && makepkg -si'
-chroot rm -r /mnt
+chroot rm -r /yay
 usrdo yay -S --noconfirm \
    google-chrome \
    emsdk
