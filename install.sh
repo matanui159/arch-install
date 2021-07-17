@@ -10,6 +10,10 @@ chroot() {
    arch-chroot /mnt $@
 }
 
+usrdo() {
+   chroot sudo -u $user $@
+}
+
 # Install Arch
 pacstrap /mnt \
    base linux linux-firmware man \
@@ -17,11 +21,11 @@ pacstrap /mnt \
    networkmanager \
    pulseaudio pulseaudio-alsa \
    fish git \
-   sway ttf-ibm-plex xorg-xwayland waybar swayidle swaylock \
-   alacritty rofi pavucontrol firefox \
+   sway ttf-ibm-plex xorg-xwayland swayidle swaylock \
+   alacritty rofi pavucontrol firefox neovim \
    base-devel cmake meson ninja yasm clang \
-   ffmpeg \
-   nano
+   yarn go \
+   ffmpeg
 
 chroot systemctl enable \
    NetworkManager
@@ -45,7 +49,7 @@ chroot localectl set-locale $lang
 read -p 'Hostname: ' hostname
 hostnamectl set-hostname $hostname
 
-# Add user and enable services
+# Add user and enable user services
 chroot useradd -d $home -s /usr/bin/fish -G wheel $user
 chroot passwd $user
 echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
@@ -53,9 +57,25 @@ chroot systemctl --machine $user@.host --user enable \
    pulseaudio
 
 # Clone dotfiles
-chroot git clone $repo $home
-chroot rm -r $home/{.git,install.sh}
-chroot chown -R $user $home
+usrdo git clone $repo $home
+usrdo rm -r $home/{.git,install.sh}
+
+# Install yay
+chroot git clone https://aur.archlinux.org/yay.git
+arch-chroot /mnt bash -c 'cd /yay && makepkg -si'
+chroot rm -r /mnt
+usrdo yay -S --noconfirm \
+   google-chrome \
+   emsdk
+
+# Install Yarn and N
+usrdo yarn global add yarn n
+usrdo n lts
+chroot pacman -Rs --noconfirm yarn
+
+# Install emsdk
+chroot emsdk install latest
+chroot emsdk activate latest
 
 # Reboot
 reboot now

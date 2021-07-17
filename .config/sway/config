@@ -21,8 +21,8 @@ set $menu rofi -show drun
 
 ### Output configuration
 #
-# Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
-output * bg /use/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 #
 # Example configuration:
 #
@@ -207,6 +207,7 @@ bindsym $mod+r mode "resize"
 # Read `man 5 sway-bar` for more information about this section.
 bar {
    position top
+   gaps 5
 
    # When the status_command prints a new line to stdout, swaybar updates.
    # The default just shows the current date and time.
@@ -218,5 +219,3 @@ bar {
       inactive_workspace #32323200 #32323200 #5c5c5c
    }
 }
-
-include @sysconfdir@/sway/config.d/*

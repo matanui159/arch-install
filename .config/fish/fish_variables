@@ -31,6 +31,8 @@ SETUVAR fish_pager_color_prefix:normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
 
 # Custom
+SETUVAR fish_user_paths:/home/matanui159/\x2elocal/bin\x1e/home/matanui159/\x2eyarn/bin
+SETUVAR --export N_PREFIX:/home/matanui159/\x2elocal
 
 # VirtualBox
 SETUVAR --export LIBGL_ALWAYS_SOFTWARE:true
