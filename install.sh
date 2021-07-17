@@ -14,7 +14,7 @@ fishset() {
 
 # Install Arch
 pacstrap /mnt \
-   base linux linux-firmware mandb \
+   base linux linux-firmware man \
    grub efibootmgr \
    networkmanager \
    fish git \
