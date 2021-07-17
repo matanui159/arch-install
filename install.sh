@@ -78,7 +78,7 @@ chroot pacman -Rs --noconfirm yarn
 usrdo pip install virtualfish
 usrdo $home/.local/bin/vf install auto_activation
 
-# Install emsdk
+# Install Emscripten
 chroot emsdk install latest
 chroot emsdk activate latest
 
