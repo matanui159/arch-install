@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
+set -ex
 
-read -p 'Hostname: ' hostname
 user=matanui159
 repo=https://github.com/$user/arch-install.git
 lang=en_US.UTF-8
@@ -13,17 +13,14 @@ fishset() {
    chroot fish -c "set -Ux $@"
 }
 
-set -ex
-
 # Install Arch
 pacstrap /mnt \
    base linux linux-firmware man \
    grub efibootmgr \
    networkmanager \
    fish git \
-   sway waybar swayidle swaylock \
-   alacritty rofi \
-   pulseaudio pavucontrol \
+   sway xwayland waybar swayidle swaylock \
+   alacritty rofi pavucontrol \
    base-devel cmake meson ninja yasm clang \
    ffmpeg \
    nano
@@ -47,10 +44,11 @@ chroot locale-gen
 chroot localectl set-locale $lang
 
 # Configure hostname
+read -p 'Hostname: ' hostname
 hostnamectl set-hostname $hostname
 
 # Add user and clone dotfiles
-chroot useradd -G wheel -s /usr/bin/fish -m $user
+chroot useradd -G wheel -s /usr/bin/fish $user
 chroot passwd $user
 echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
 chroot git clone https://github.com/$user/arch-install.git /home/$user
