@@ -24,7 +24,7 @@ pacstrap /mnt \
    sway ttf-ibm-plex xorg-xwayland swayidle swaylock \
    alacritty rofi pavucontrol firefox neovim \
    base-devel cmake meson ninja yasm clang \
-   yarn go \
+   yarn python-pip go \
    ffmpeg
 
 chroot systemctl enable \
@@ -49,29 +49,34 @@ chroot localectl set-locale $lang
 read -p 'Hostname: ' hostname
 hostnamectl set-hostname $hostname
 
+# Clone repo into skeleton
+chroot rm -r /etc/skel
+chroot git clone $repo /etc/skel
+chroot rm -r /etc/skel/{.git,install.sh}
+
 # Add user and enable user services
-chroot useradd -k /skel -m -d $home -s /usr/bin/fish -G wheel $user
+chroot useradd -d $home -s /usr/bin/fish -G wheel -m $user
 chroot passwd $user
 echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
 chroot systemctl --machine $user@.host --user enable \
    pulseaudio
 
-# Clone dotfiles
-usrdo git clone $repo $home
-usrdo rm -r $home/{.git,install.sh}
-
 # Install yay
-chroot git clone https://aur.archlinux.org/yay.git
-arch-chroot /mnt bash -c 'cd /yay && makepkg -si'
-chroot rm -r /yay
+usrdo git clone https://aur.archlinux.org/yay.git $home/yay
+arch-chroot /mnt sudo -u $user bash -c "cd $home/yay && makepkg -si --noconfirm"
+chroot rm -r $home/yay
 usrdo yay -S --noconfirm \
    google-chrome \
    emsdk
 
 # Install Yarn and N
 usrdo yarn global add yarn n
-usrdo n lts
+usrdo N_PREFIX=$home/.local $home/.yarn/bin/n lts
 chroot pacman -Rs --noconfirm yarn
+
+# Install VirtualFish
+usrdo pip install virtualfish
+usrdo $home/.local/bin/vf install auto_activation
 
 # Install emsdk
 chroot emsdk install latest
