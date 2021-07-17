@@ -1,3 +1,3 @@
-if status is-interactive
+if status is-login
    sway
 end

@@ -2,15 +2,12 @@
 set -ex
 
 user=matanui159
+home=/home/$user
 repo=https://github.com/$user/arch-install.git
 lang=en_US.UTF-8
 
 chroot() {
    arch-chroot /mnt $@
-}
-
-usrdo() {
-   chroot sudo -u $user $@
 }
 
 # Install Arch
@@ -21,7 +18,7 @@ pacstrap /mnt \
    pulseaudio pulseaudio-alsa \
    fish git \
    sway ttf-ibm-plex xorg-xwayland waybar swayidle swaylock \
-   alacritty rofi pavucontrol \
+   alacritty rofi pavucontrol firefox \
    base-devel cmake meson ninja yasm clang \
    ffmpeg \
    nano
@@ -49,15 +46,16 @@ read -p 'Hostname: ' hostname
 hostnamectl set-hostname $hostname
 
 # Add user and enable services
-chroot useradd -G wheel -s /usr/bin/fish $user
+chroot useradd -d $home -s /usr/bin/fish -G wheel $user
 chroot passwd $user
 echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
-usrdo systemctl --user enable \
+chroot systemctl --machine $user@.host --user enable \
    pulseaudio
 
 # Clone dotfiles
-usrdo git clone https://github.com/$user/arch-install.git /home/$user
-usrdo rm -r /home/$user/{.git,install.sh}
+chroot git clone $repo $home
+chroot rm -r $home/{.git,install.sh}
+chroot chown -R $user $home
 
 # Reboot
 reboot now
