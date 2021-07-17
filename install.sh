@@ -9,8 +9,8 @@ chroot() {
    arch-chroot /mnt $@
 }
 
-fishset() {
-   chroot fish -c "set -Ux $@"
+usrdo() {
+   chroot sudo -u $user $@
 }
 
 # Install Arch
@@ -18,8 +18,9 @@ pacstrap /mnt \
    base linux linux-firmware man \
    grub efibootmgr \
    networkmanager \
+   pulseaudio pulseaudio-alsa \
    fish git \
-   sway xwayland waybar swayidle swaylock \
+   sway ttf-ibm-plex xorg-xwayland waybar swayidle swaylock \
    alacritty rofi pavucontrol \
    base-devel cmake meson ninja yasm clang \
    ffmpeg \
@@ -47,17 +48,16 @@ chroot localectl set-locale $lang
 read -p 'Hostname: ' hostname
 hostnamectl set-hostname $hostname
 
-# Add user and clone dotfiles
+# Add user and enable services
 chroot useradd -G wheel -s /usr/bin/fish $user
 chroot passwd $user
 echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
-chroot git clone https://github.com/$user/arch-install.git /home/$user
-chroot rm -r /home/$user/{.git,install.sh}
-chroot chown -R $user /home/$user
+usrdo systemctl --user enable \
+   pulseaudio
 
-# Configuration for VirtualBox
-fishset LIBGL_ALWAYS_SOFTWARE true
-fishset WLR_NO_HARDWARE_CURSORS 1
+# Clone dotfiles
+usrdo git clone https://github.com/$user/arch-install.git /home/$user
+usrdo rm -r /home/$user/{.git,install.sh}
 
 # Reboot
 reboot now
