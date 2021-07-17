@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-set -e
 
+read -p 'Hostname: ' hostname
 user=matanui159
 repo=https://github.com/$user/arch-install.git
+lang=en_US.UTF-8
 
 chroot() {
    arch-chroot /mnt $@
@@ -11,6 +12,8 @@ chroot() {
 fishset() {
    chroot fish -c "set -Ux $@"
 }
+
+set -ex
 
 # Install Arch
 pacstrap /mnt \
@@ -39,13 +42,12 @@ chroot timedatectl set-ntp true
 chroot timedatectl set-timezone Australia/Brisbane
 
 # Configure locale
-echo 'en_US.UTF-8 UTF-8' >> /mnt/etc/locale.gen
+echo "$lang UTF-8" >> /mnt/etc/locale.gen
 chroot locale-gen
-chroot localectl set-locale en_US.UTF-8
+chroot localectl set-locale $lang
 
 # Configure hostname
-read -p 'Hostname: ' $hostname
-hostnamectl hostname $hostname
+hostnamectl set-hostname $hostname
 
 # Add user and clone dotfiles
 chroot useradd -G wheel -s /usr/bin/fish -m $user
@@ -58,3 +60,6 @@ chroot chown -R $user /home/$user
 # Configuration for VirtualBox
 fishset LIBGL_ALWAYS_SOFTWARE true
 fishset WLR_NO_HARDWARE_CURSORS 1
+
+# Reboot
+reboot now
