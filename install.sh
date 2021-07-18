@@ -35,12 +35,11 @@ chroot systemctl enable \
 genfstab /mnt >> /mnt/etc/fstab
 
 # Install multilib
-cat > /mnt/etc/pacman.conf << EOF
+cat >> /mnt/etc/pacman.conf << EOF
 [multilib]
 Include = /etc/pacman.d/mirrorlist
 EOF
-pacman -Syu --noconfirm
-pacman -S --noconfirm \
+chroot pacman -Sy --noconfirm \
    lib32-mesa steam
 
 # Install GRUB
@@ -58,7 +57,7 @@ chroot localectl set-locale $lang
 
 # Configure hostname
 read -p 'Hostname: ' hostname
-hostnamectl set-hostname $hostname
+chroot hostnamectl set-hostname $hostname
 
 # Configure bluetooth
 chroot sed s/\#AutoEnable=false/AutoEnable=true/ -i /etc/bluetooth/main.conf
