@@ -15,23 +15,21 @@ usrdo() {
 }
 
 # Install Arch
-pacstrap /mnt \
+pacstrap -i /mnt \
    base linux linux-firmware mesa man \
    grub efibootmgr \
    networkmanager \
    bluez bluez-utils \
-   pulseaudio pulseaudio-alsa pulseaudio-bluetooth pamixer \
-   fish git \
-   sway ttf-ibm-plex xorg-xwayland swayidle swaylock \
+   pulseaudio pulseaudio-alsa libldac pamixer \
+   git fish \
+   noto-fonts noto-fonts-cjk noto-fonts-emoji \
+   sway xorg-xwayland swayidle swaylock \
    alacritty rofi firefox imv mpv ranger neovim discord \
-   base-devel cmake meson ninja yasm clang \
-   yarn python-pip go \
+   base-devel cmake ninja yasm clang \
+   yarn python-pip \
    ffmpeg
 
-chroot systemctl enable \
-   NetworkManager \
-   bluetooth
-
+chroot systemctl enable NetworkManager bluetooth
 genfstab /mnt >> /mnt/etc/fstab
 
 # Install multilib
@@ -39,8 +37,7 @@ cat >> /mnt/etc/pacman.conf << EOF
 [multilib]
 Include = /etc/pacman.d/mirrorlist
 EOF
-chroot pacman -Sy --noconfirm \
-   lib32-mesa steam
+chroot pacman -Sy lib32-mesa steam
 
 # Install GRUB
 chroot grub-install --efi-directory=/efi
@@ -67,28 +64,28 @@ chroot rm -r /etc/skel
 chroot git clone $repo /etc/skel
 chroot rm -r /etc/skel/{.git,install.sh}
 
-# Add user and enable user services
+# Add user
 chroot useradd -d $home -s /usr/bin/fish -G wheel -m $user
 chroot passwd $user
 echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
-chroot systemctl --machine ${user}@.host --user enable \
-   pulseaudio
 
-# Install yay
+# Install Yay and Yay packages
 usrdo git clone https://aur.archlinux.org/yay.git $home/yay
 arch-chroot /mnt sudo -u $user bash -c "cd $home/yay && makepkg -si --noconfirm"
 chroot rm -r $home/yay
-usrdo yay -S --noconfirm \
+usrdo yay -S \
+   pulseaudio-modules-bt
    google-chrome slack-desktop \
+   google-cloud-sdk google-cloud-sdk-app-engine-python google-cloud-sdk-app-engine-python-extras google-cloud-sdk-datastore-emulator \
    emsdk
 
-# Install Yarn and N
+# Install Yarn packages
 usrdo yarn global add yarn n
 usrdo N_PREFIX=$home/.local $home/.yarn/bin/n lts
 chroot pacman -Rs --noconfirm yarn
 
-# Install VirtualFish
-usrdo pip install virtualfish
+# Install Pip packages
+usrdo pip install virtualfish meson
 usrdo $home/.local/bin/vf install auto_activation
 
 # Install Emscripten
