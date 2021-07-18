@@ -16,18 +16,18 @@ usrdo() {
 
 # Install Arch
 pacstrap -i /mnt \
-   base linux linux-firmware mesa man \
+   base linux linux-firmware man-db man-pages mesa \
    grub efibootmgr \
    networkmanager \
    bluez bluez-utils \
    pulseaudio pulseaudio-alsa libldac pamixer \
    git fish \
-   noto-fonts noto-fonts-cjk noto-fonts-emoji \
+   noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono \
    sway swayidle swaylock xorg-wayland mako wl-clipboard grim slurp \
    alacritty rofi firefox imv mpv ranger neovim discord \
    base-devel cmake ninja yasm clang \
    yarn python-pip \
-   ffmpeg
+   chromium ffmpeg
 
 chroot systemctl enable NetworkManager bluetooth
 genfstab /mnt >> /mnt/etc/fstab
@@ -73,11 +73,9 @@ echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
 usrdo git clone https://aur.archlinux.org/yay.git $home/yay
 arch-chroot /mnt sudo -u $user bash -c "cd $home/yay && makepkg -si --noconfirm"
 chroot rm -r $home/yay
-usrdo yay -S \
-   pulseaudio-modules-bt
-   google-chrome slack-desktop \
+usrdo yay -S --noconfirm \
+   pulseaudio-modules-bt slack-desktop emsdk \
    google-cloud-sdk google-cloud-sdk-app-engine-python google-cloud-sdk-app-engine-python-extras google-cloud-sdk-datastore-emulator \
-   emsdk
 
 # Install Yarn packages
 usrdo yarn global add yarn n

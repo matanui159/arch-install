@@ -97,17 +97,22 @@ bindsym XF86AudioRaiseVolume exec pamixer -i 10
 
 bar {
    position top
+   status_command ~/.config/sway/status.fish
    colors {
       # Default colors
       statusline #ffffff
       background #323232
-      inactive_workspace #32323200 #32323200 #5c5c5c
+      inactive_workspace #323232 #323232 #5c5c5c
    }
+}
+
+input * {
+   xkb_numlock enabled
 }
 
 exec swayidle -w \
    timeout 300 'swaylock -f' \
-   timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+   timeout 600 'systemctl suspend' \
    before-sleep 'swaylock -f'
 
 exec discord
