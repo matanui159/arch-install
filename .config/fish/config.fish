@@ -1,3 +1,3 @@
-if status is-login
+while status is-login
    sway
 end

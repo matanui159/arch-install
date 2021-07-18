@@ -35,5 +35,5 @@ SETUVAR fish_user_paths:/home/matanui159/\x2elocal/bin\x1e/home/matanui159/\x2ey
 SETUVAR --export N_PREFIX:/home/matanui159/\x2elocal
 
 # VirtualBox
-SETUVAR --export LIBGL_ALWAYS_SOFTWARE:true
-SETUVAR --export WLR_NO_HARDWARE_CURSORS:1
+# SETUVAR --export LIBGL_ALWAYS_SOFTWARE:true
+# SETUVAR --export WLR_NO_HARDWARE_CURSORS:1

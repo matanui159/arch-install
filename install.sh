@@ -16,14 +16,14 @@ usrdo() {
 
 # Install Arch
 pacstrap /mnt \
-   base linux linux-firmware man \
+   base linux linux-firmware mesa man \
    grub efibootmgr \
    networkmanager \
    bluez bluez-utils \
    pulseaudio pulseaudio-alsa pulseaudio-bluetooth pamixer \
    fish git \
    sway ttf-ibm-plex xorg-xwayland swayidle swaylock \
-   alacritty rofi firefox imv mpv ranger neovim \
+   alacritty rofi firefox imv mpv ranger neovim discord \
    base-devel cmake meson ninja yasm clang \
    yarn python-pip go \
    ffmpeg
@@ -33,6 +33,15 @@ chroot systemctl enable \
    bluetooth
 
 genfstab /mnt >> /mnt/etc/fstab
+
+# Install multilib
+cat > /mnt/etc/pacman.conf << EOF
+[multilib]
+Include = /etc/pacman.d/mirrorlist
+EOF
+pacman -Syu --noconfirm
+pacman -S --noconfirm \
+   lib32-mesa steam
 
 # Install GRUB
 chroot grub-install --efi-directory=/efi
@@ -52,7 +61,7 @@ read -p 'Hostname: ' hostname
 hostnamectl set-hostname $hostname
 
 # Configure bluetooth
-echo 'AutoEnable=true' >> /mnt/etc/bluetooth/main.conf
+chroot sed s/\#AutoEnable=false/AutoEnable=true/ -i /etc/bluetooth/main.conf
 
 # Clone repo into skeleton
 chroot rm -r /etc/skel
@@ -63,7 +72,7 @@ chroot rm -r /etc/skel/{.git,install.sh}
 chroot useradd -d $home -s /usr/bin/fish -G wheel -m $user
 chroot passwd $user
 echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
-chroot systemctl --machine $user@.host --user enable \
+chroot systemctl --machine ${user}@.host --user enable \
    pulseaudio
 
 # Install yay
@@ -71,7 +80,7 @@ usrdo git clone https://aur.archlinux.org/yay.git $home/yay
 arch-chroot /mnt sudo -u $user bash -c "cd $home/yay && makepkg -si --noconfirm"
 chroot rm -r $home/yay
 usrdo yay -S --noconfirm \
-   google-chrome \
+   google-chrome slack-desktop \
    emsdk
 
 # Install Yarn and N
