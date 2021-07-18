@@ -19,16 +19,18 @@ pacstrap /mnt \
    base linux linux-firmware man \
    grub efibootmgr \
    networkmanager \
-   pulseaudio pulseaudio-alsa \
+   bluez bluez-utils \
+   pulseaudio pulseaudio-alsa pulseaudio-bluetooth pamixer \
    fish git \
    sway ttf-ibm-plex xorg-xwayland swayidle swaylock \
-   alacritty rofi pavucontrol firefox neovim \
+   alacritty rofi firefox imv mpv ranger neovim \
    base-devel cmake meson ninja yasm clang \
    yarn python-pip go \
    ffmpeg
 
 chroot systemctl enable \
-   NetworkManager
+   NetworkManager \
+   bluetooth
 
 genfstab /mnt >> /mnt/etc/fstab
 
@@ -48,6 +50,9 @@ chroot localectl set-locale $lang
 # Configure hostname
 read -p 'Hostname: ' hostname
 hostnamectl set-hostname $hostname
+
+# Configure bluetooth
+echo 'AutoEnable=true' >> /mnt/etc/bluetooth/main.conf
 
 # Clone repo into skeleton
 chroot rm -r /etc/skel
