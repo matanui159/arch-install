@@ -23,7 +23,7 @@ pacstrap -i /mnt \
    pulseaudio pulseaudio-alsa libldac pamixer \
    git fish \
    noto-fonts noto-fonts-cjk noto-fonts-emoji \
-   sway xorg-xwayland swayidle swaylock \
+   sway swayidle swaylock xorg-wayland mako wl-clipboard grim slurp \
    alacritty rofi firefox imv mpv ranger neovim discord \
    base-devel cmake ninja yasm clang \
    yarn python-pip \

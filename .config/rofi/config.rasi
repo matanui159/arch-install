@@ -1,4 +1,3 @@
 configuration {
    modi: "drun";
 }
-@import "/usr/share/rofi/themes/purple.rasi"
