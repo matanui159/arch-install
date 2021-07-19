@@ -1,0 +1,19 @@
+{
+    "editor.lineNumbers": "relative",
+    "editor.tabSize": 3,
+    "editor.rulers": [90],
+    "editor.renderWhitespace": "boundary",
+    "editor.fontFamily": "monospace",
+    "editor.fontLigatures": true,
+
+    "workbench.colorTheme": "Monokai Pro (Filter Spectrum)",
+    "workbench.iconTheme": "Monokai Pro (Filter Spectrum) Icons",
+    "workbench.sideBar.location": "right",
+    "workbench.editor.showTabs": false,
+    "workbench.editor.enablePreview": false,
+
+    "git.autofetch": true,
+    "terminal.integrated.showExitAlert": false,
+    "javascript.preferences.quoteStyle": "single",
+    "typescript.preferences.quoteStyle": "single",
+}

@@ -14,17 +14,21 @@ usrdo() {
    chroot sudo -u $user $@
 }
 
+codeext() {
+   usrdo code --install-extension $1
+}
+
 # Install Arch
 pacstrap -i /mnt \
-   base linux linux-firmware man-db man-pages mesa \
+   base linux linux-firmware mkinitcpio man-db man-pages mesa \
    grub efibootmgr \
    networkmanager \
    bluez bluez-utils \
    pulseaudio pulseaudio-alsa libldac pamixer \
-   git fish \
+   git git-lfs fish \
    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono \
-   sway swayidle swaylock xorg-wayland mako wl-clipboard grim slurp \
-   alacritty rofi firefox imv mpv ranger neovim discord \
+   sway swayidle swaylock xorg-xwayland mako wl-clipboard grim slurp \
+   alacritty rofi firefox imv mpv ranger discord \
    base-devel cmake ninja yasm clang \
    yarn python-pip \
    chromium ffmpeg
@@ -74,7 +78,9 @@ usrdo git clone https://aur.archlinux.org/yay.git $home/yay
 arch-chroot /mnt sudo -u $user bash -c "cd $home/yay && makepkg -si --noconfirm"
 chroot rm -r $home/yay
 usrdo yay -S --noconfirm \
-   pulseaudio-modules-bt slack-desktop emsdk \
+   pulseaudio-modules-bt \
+   visual-studio-code-bin slack-desktop \
+   emsdk \
    google-cloud-sdk google-cloud-sdk-app-engine-python google-cloud-sdk-app-engine-python-extras google-cloud-sdk-datastore-emulator \
 
 # Install Yarn packages
@@ -85,6 +91,16 @@ chroot pacman -Rs --noconfirm yarn
 # Install Pip packages
 usrdo pip install virtualfish meson
 usrdo $home/.local/bin/vf install auto_activation
+
+# Install VSCode Extensions
+codeext monokai.theme-monokai-pro-vscode
+codeext vscodevim.vim
+codeext skattyadz.vscode-quick-scope
+codeext bmalehorn.vscode-fish
+codeext ms-vscode.cpptools
+codeext ms-vscode.cmake-tools
+codeext asabil.meson
+codeext dbaeumer.vscode-eslint
 
 # Install Emscripten
 chroot emsdk install latest

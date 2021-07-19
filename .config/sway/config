@@ -89,11 +89,13 @@ mode "resize" {
    bindsym Escape mode "default"
 }
 
-# Media keybindings
-bindsym Print exec ~/.config/sway/grim.sh
+# Media bindings
+bindsym Print exec ~/.config/sway/grim.fish
 bindsym XF86AudioMute exec pamixer -t
 bindsym XF86AudioLowerVolume exec pamixer -d 10
 bindsym XF86AudioRaiseVolume exec pamixer -i 10
+bindswitch --locked lid:on swaylock
+bindswitch lid:on systemctl suspend
 
 bar {
    position top
@@ -110,6 +112,7 @@ input * {
    xkb_numlock enabled
 }
 
+exec mako
 exec swayidle -w \
    timeout 300 'swaylock -f' \
    timeout 600 'systemctl suspend' \
