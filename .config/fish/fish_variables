@@ -34,6 +34,7 @@ SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
 SETUVAR fish_user_paths:/home/matanui159/\x2elocal/bin\x1e/home/matanui159/\x2eyarn/bin
 SETUVAR --export EDITOR:code\x20\x2d\x2dwait
 SETUVAR --export VISUAL:code\x20\x2d\x2dwait
+SETUVAR --export GTK_THEME:Adwaita\x3adark
 SETUVAR --export N_PREFIX:/home/matanui159/\x2elocal
 
 # VirtualBox

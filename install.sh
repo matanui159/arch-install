@@ -50,6 +50,7 @@ chroot grub-mkconfig -o /boot/grub/grub.cfg
 # Configure timezone
 chroot timedatectl set-ntp true
 chroot timedatectl set-timezone Australia/Brisbane
+chroot timedatectl status
 
 # Configure locale
 echo "$lang UTF-8" >> /mnt/etc/locale.gen
@@ -72,6 +73,7 @@ chroot rm -r /etc/skel/{.git,install.sh}
 chroot useradd -d $home -s /usr/bin/fish -G wheel -m $user
 chroot passwd $user
 echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
+usrdo timedatectl status
 
 # Install Yay and Yay packages
 usrdo git clone https://aur.archlinux.org/yay.git $home/yay
@@ -107,4 +109,5 @@ chroot emsdk install latest
 chroot emsdk activate latest
 
 # Reboot
+chroot timedatectl status
 reboot now
