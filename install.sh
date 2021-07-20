@@ -25,7 +25,7 @@ pacstrap -i /mnt \
    networkmanager \
    bluez bluez-utils \
    pulseaudio pulseaudio-alsa libldac pamixer \
-   git git-lfs fish \
+   fish fscrypt git git-lfs \
    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono \
    sway swayidle swaylock xorg-xwayland mako wl-clipboard grim slurp \
    alacritty rofi firefox imv mpv ranger discord \
@@ -50,7 +50,6 @@ chroot grub-mkconfig -o /boot/grub/grub.cfg
 # Configure timezone
 chroot timedatectl set-ntp true
 chroot timedatectl set-timezone Australia/Brisbane
-chroot timedatectl status
 
 # Configure locale
 echo "$lang UTF-8" >> /mnt/etc/locale.gen
@@ -64,16 +63,22 @@ chroot hostnamectl set-hostname $hostname
 # Configure bluetooth
 chroot sed s/\#AutoEnable=false/AutoEnable=true/ -i /etc/bluetooth/main.conf
 
-# Clone repo into skeleton
-chroot rm -r /etc/skel
-chroot git clone $repo /etc/skel
-chroot rm -r /etc/skel/{.git,install.sh}
-
 # Add user
-chroot useradd -d $home -s /usr/bin/fish -G wheel -m $user
+chroot useradd -k empty -d $home -s /usr/bin/fish -G wheel -m $user
 chroot passwd $user
 echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
-usrdo timedatectl status
+
+# Encrypt home directory
+chroot fscrypt setup
+chroot sed -i /etc/pam.d/system-login \
+   -e '/auth.*system-auth/a\auth optional pam_fscrypt.so' \
+   -e '/session.*pam_systemd.so/i\session optional pam_fscrypt.so'
+echo 'password optional pam_fscrypt.so' >> /mnt/etc/pam.d/passwd
+usrdo fscrypt encrypt --source=pam_passphrase
+
+# Clone dotfiles
+usrdo git clone $repo $home
+usrdo rm -r $home/{.git,install.sh}
 
 # Install Yay and Yay packages
 usrdo git clone https://aur.archlinux.org/yay.git $home/yay
@@ -81,6 +86,7 @@ arch-chroot /mnt sudo -u $user bash -c "cd $home/yay && makepkg -si --noconfirm"
 chroot rm -r $home/yay
 usrdo yay -S --noconfirm \
    pulseaudio-modules-bt \
+   ttf-twemoji \
    visual-studio-code-bin slack-desktop \
    emsdk \
    google-cloud-sdk google-cloud-sdk-app-engine-python google-cloud-sdk-app-engine-python-extras google-cloud-sdk-datastore-emulator \
@@ -110,4 +116,5 @@ chroot emsdk activate latest
 
 # Reboot
 chroot timedatectl status
-reboot now
+sleep 60
+systemctl reboot

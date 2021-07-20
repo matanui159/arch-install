@@ -5,6 +5,7 @@
     "editor.renderWhitespace": "boundary",
     "editor.fontFamily": "monospace",
     "editor.fontLigatures": true,
+    "editor.acceptSuggestionOnCommitCharacter": false,
 
     "workbench.colorTheme": "Monokai Pro (Filter Spectrum)",
     "workbench.iconTheme": "Monokai Pro (Filter Spectrum) Icons",
