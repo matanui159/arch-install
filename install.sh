@@ -47,18 +47,10 @@ chroot pacman -Sy lib32-mesa steam
 chroot grub-install --efi-directory=/efi
 chroot grub-mkconfig -o /boot/grub/grub.cfg
 
-# Configure timezone
-chroot timedatectl set-ntp true
-chroot timedatectl set-timezone Australia/Brisbane
-
 # Configure locale
 echo "$lang UTF-8" >> /mnt/etc/locale.gen
 chroot locale-gen
 chroot localectl set-locale $lang
-
-# Configure hostname
-read -p 'Hostname: ' hostname
-chroot hostnamectl set-hostname $hostname
 
 # Configure bluetooth
 chroot sed s/\#AutoEnable=false/AutoEnable=true/ -i /etc/bluetooth/main.conf
@@ -70,11 +62,11 @@ echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
 
 # Encrypt home directory
 chroot fscrypt setup
-chroot sed -i /etc/pam.d/system-login \
+usrdo fscrypt encrypt --source=pam_passphrase $home
+arch-chroot /mnt sed -i /etc/pam.d/system-login \
    -e '/auth.*system-auth/a\auth optional pam_fscrypt.so' \
    -e '/session.*pam_systemd.so/i\session optional pam_fscrypt.so'
 echo 'password optional pam_fscrypt.so' >> /mnt/etc/pam.d/passwd
-usrdo fscrypt encrypt --source=pam_passphrase
 
 # Clone dotfiles
 usrdo git clone $repo $home
