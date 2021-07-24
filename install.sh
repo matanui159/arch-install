@@ -6,9 +6,17 @@ home=/home/$user
 repo=https://github.com/$user/arch-install.git
 lang=en_US.UTF-8
 
-alias chroot='arch-chroot /mnt'
-alias usrdo="chroot sudo -u $user"
-alias codeext='usrdo code --install-extension'
+chroot() {
+   arch-chroot /mnt $@
+}
+
+usrdo() {
+   chroot sudo -u $user $@
+}
+
+codeext() {
+   usrdo code --install-extension $1
+}
 
 # Install Arch
 pacstrap -i /mnt \
@@ -16,7 +24,7 @@ pacstrap -i /mnt \
    grub efibootmgr \
    networkmanager \
    bluez bluez-utils \
-   pulseaudio pulseaudio-alsa libldac pamixer \
+   pulseaudio pulseaudio-alsa jack2 libldac pamixer \
    fish fscrypt git git-lfs \
    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono \
    sway swayidle swaylock xorg-xwayland alacritty rofi mako wl-clipboard grim slurp \
@@ -55,7 +63,7 @@ echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
 # Encrypt home directory
 chroot fscrypt setup
 usrdo fscrypt encrypt --source=pam_passphrase $home
-chroot sed -i /etc/pam.d/system-login \
+arch-chroot /mnt sed -i /etc/pam.d/system-login \
    -e '/auth.*system-auth/a\auth optional pam_fscrypt.so' \
    -e '/session.*pam_systemd.so/i\session optional pam_fscrypt.so'
 echo 'password optional pam_fscrypt.so' >> /mnt/etc/pam.d/passwd
@@ -66,7 +74,7 @@ usrdo rm -rf $home/{.git,install.sh}
 
 # Install Yay and Yay packages
 usrdo git clone https://aur.archlinux.org/yay.git $home/yay
-usrdo bash -c "cd $home/yay && makepkg -si --noconfirm"
+arch-chroot /mnt sudo -u $user bash -c "cd $home/yay && makepkg -si --noconfirm"
 chroot rm -r $home/yay
 usrdo yay -S --noconfirm \
    pulseaudio-modules-bt \
