@@ -81,7 +81,7 @@ usrdo yay -S --noconfirm \
    ttf-twemoji \
    visual-studio-code-bin slack-desktop \
    emsdk \
-   google-cloud-sdk google-cloud-sdk-app-engine-python google-cloud-sdk-app-engine-python-extras google-cloud-sdk-datastore-emulator \
+   google-cloud-sdk google-cloud-sdk-app-engine-python google-cloud-sdk-app-engine-python-extras google-cloud-sdk-datastore-emulator
 
 # Install Yarn packages
 usrdo yarn global add yarn n
