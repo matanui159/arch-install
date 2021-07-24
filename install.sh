@@ -6,17 +6,9 @@ home=/home/$user
 repo=https://github.com/$user/arch-install.git
 lang=en_US.UTF-8
 
-chroot() {
-   arch-chroot /mnt $@
-}
-
-usrdo() {
-   chroot sudo -u $user $@
-}
-
-codeext() {
-   usrdo code --install-extension $1
-}
+alias chroot='arch-chroot /mnt'
+alias usrdo="chroot sudo -u $user"
+alias codeext='usrdo code --install-extension'
 
 # Install Arch
 pacstrap -i /mnt \
@@ -27,11 +19,11 @@ pacstrap -i /mnt \
    pulseaudio pulseaudio-alsa libldac pamixer \
    fish fscrypt git git-lfs \
    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono \
-   sway swayidle swaylock xorg-xwayland mako wl-clipboard grim slurp \
-   alacritty rofi firefox imv mpv ranger discord \
-   base-devel cmake ninja yasm clang \
-   yarn python-pip \
-   chromium ffmpeg
+   sway swayidle swaylock xorg-xwayland alacritty rofi mako wl-clipboard grim slurp \
+   nautilus file-roller eog totem evince gnome-calculator gnome-system-monitor baobab \
+   firefox chromium discord \
+   base-devel cmake ninja yasm clang ffmpeg \
+   go yarn python-pip
 
 chroot systemctl enable NetworkManager bluetooth
 genfstab /mnt >> /mnt/etc/fstab
@@ -63,18 +55,18 @@ echo '%wheel ALL=(ALL) ALL' >> /mnt/etc/sudoers
 # Encrypt home directory
 chroot fscrypt setup
 usrdo fscrypt encrypt --source=pam_passphrase $home
-arch-chroot /mnt sed -i /etc/pam.d/system-login \
+chroot sed -i /etc/pam.d/system-login \
    -e '/auth.*system-auth/a\auth optional pam_fscrypt.so' \
    -e '/session.*pam_systemd.so/i\session optional pam_fscrypt.so'
 echo 'password optional pam_fscrypt.so' >> /mnt/etc/pam.d/passwd
 
 # Clone dotfiles
 usrdo git clone $repo $home
-usrdo rm -r $home/{.git,install.sh}
+usrdo rm -rf $home/{.git,install.sh}
 
 # Install Yay and Yay packages
 usrdo git clone https://aur.archlinux.org/yay.git $home/yay
-arch-chroot /mnt sudo -u $user bash -c "cd $home/yay && makepkg -si --noconfirm"
+usrdo bash -c "cd $home/yay && makepkg -si --noconfirm"
 chroot rm -r $home/yay
 usrdo yay -S --noconfirm \
    pulseaudio-modules-bt \
@@ -107,6 +99,4 @@ chroot emsdk install latest
 chroot emsdk activate latest
 
 # Reboot
-chroot timedatectl status
-sleep 60
 systemctl reboot

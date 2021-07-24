@@ -1,3 +1,3 @@
-if test (tty) = /dev/tty1
+if status is-login && test (tty) = /dev/tty1
    sway
 end

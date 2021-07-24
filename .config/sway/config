@@ -13,6 +13,8 @@ set $right l
 floating_modifier $mod normal
 bindsym $mod+Return exec alacritty
 bindsym $mod+d exec rofi -show drun
+bindsym $mod+m exec makoctl invoke
+bindsym $mod+Shift+m exec makoctl dismiss
 bindsym $mod+Shift+q kill
 bindsym $mod+$alt+l exec swaylock
 bindsym $mod+Shift+c reload

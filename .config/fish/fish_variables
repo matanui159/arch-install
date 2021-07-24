@@ -30,10 +30,13 @@ SETUVAR fish_pager_color_description:B3A06D\x1eyellow
 SETUVAR fish_pager_color_prefix:normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
 
-# Custom
-SETUVAR fish_user_paths:/home/matanui159/\x2elocal/bin\x1e/home/matanui159/\x2eyarn/bin
+# Default programs
+SETUVAR --export BROWSER:firefox
 SETUVAR --export EDITOR:code\x20\x2d\x2dwait
 SETUVAR --export VISUAL:code\x20\x2d\x2dwait
+
+# Other
+SETUVAR fish_user_paths:/home/matanui159/\x2elocal/bin\x1e/home/matanui159/\x2eyarn/bin
 SETUVAR --export GTK_THEME:Adwaita\x3adark
 SETUVAR --export N_PREFIX:/home/matanui159/\x2elocal
 
