@@ -1,5 +1,6 @@
 output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 gaps inner 10
+for_window [app_id="gnome-calculator"] floating enable
 
 # Keynames
 set $mod Mod4
@@ -92,11 +93,12 @@ mode "resize" {
    bindsym Escape mode "default"
 }
 
-# Media bindings
+# Special bindings
 bindsym Print exec ~/.config/sway/grim.fish
 bindsym XF86AudioMute exec pamixer -t
 bindsym XF86AudioLowerVolume exec pamixer -d 10
 bindsym XF86AudioRaiseVolume exec pamixer -i 10
+bindsym XF86Calculator exec gnome-calculator
 bindswitch lid:on systemctl suspend
 
 bar {
