@@ -27,7 +27,7 @@ pacstrap -i /mnt \
    pulseaudio pulseaudio-alsa libldac pamixer \
    fish fscrypt git git-lfs \
    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono \
-   sway swayidle swaylock xorg-xwayland alacritty rofi mako wl-clipboard grim slurp \
+   sway swayidle swaylock xorg-xwayland kanshi mako alacritty rofi wl-clipboard grim slurp \
    thunar gvfs thunar-archive-plugin xarchiver tumbler ffmpegthumbnailer \
    imv mpv firefox chromium discord \
    calc htop ffmpeg \
