@@ -24,13 +24,14 @@ pacstrap -i /mnt \
    grub efibootmgr \
    networkmanager \
    bluez bluez-utils \
-   pulseaudio pulseaudio-alsa jack2 libldac pamixer \
+   pulseaudio pulseaudio-alsa libldac pamixer \
    fish fscrypt git git-lfs \
    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono \
    sway swayidle swaylock xorg-xwayland alacritty rofi mako wl-clipboard grim slurp \
-   nautilus file-roller eog totem evince gnome-calculator gnome-system-monitor baobab \
-   firefox chromium discord \
-   base-devel cmake ninja yasm clang ffmpeg \
+   thunar gvfs thunar-archive-plugin xarchiver tumbler ffmpegthumbnailer \
+   imv mpv firefox chromium discord \
+   calc htop ffmpeg \
+   base-devel cmake ninja yasm clang \
    go yarn python-pip
 
 chroot systemctl enable NetworkManager bluetooth

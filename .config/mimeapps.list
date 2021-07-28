@@ -1,15 +1,15 @@
 [Default Applications]
-inode/directory=org.gnome.Nautilus.desktop
-application/pdf=org.gnome.Evince.desktop
+inode/directory=thunar.desktop
 application/json=visual-studio-code.desktop
 
 text/html=firefox.desktop
 text/xml=firefox.desktop
 application/xhtml+xml=firefox.desktop
+application/pdf=firefox.desktop
 x-scheme-handler/http=firefox.desktop
 x-scheme-handler/https=firefox.desktop
 
-image/png=org.gnome.oeg.desktop
-image/jpeg=org.gnome.oeg.desktop
-image/gif=org.gnome.oeg.desktop
-image/webp=org.gnome.oeg.desktop
+image/png=imv.desktop
+image/jpeg=imv.desktop
+image/gif=imv.desktop
+image/webp=imv.desktop
