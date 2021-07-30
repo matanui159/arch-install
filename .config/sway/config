@@ -1,6 +1,6 @@
 output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 gaps inner 10
-for_window [title="calc"] floating enable
+for_window [app_id="mate-calc"] floating enable
 
 # Keynames
 set $mod Mod4
@@ -98,8 +98,7 @@ bindsym Print exec ~/.config/sway/grim.fish
 bindsym XF86AudioMute exec pamixer -t
 bindsym XF86AudioLowerVolume exec pamixer -d 10
 bindsym XF86AudioRaiseVolume exec pamixer -i 10
-bindsym XF86Calculator exec alacritty -t calc -e calc
-bindswitch lid:on systemctl suspend
+bindsym XF86Calculator exec mate-calc
 
 bar {
    position top
