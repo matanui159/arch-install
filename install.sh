@@ -76,7 +76,7 @@ usrdo rm -rf $home/{.git,install.sh}
 # Install Yay and Yay packages
 usrdo git clone https://aur.archlinux.org/yay.git $home/yay
 arch-chroot /mnt sudo -u $user bash -c "cd $home/yay && makepkg -si --noconfirm"
-chroot rm -r $home/yay
+usrdo rm -rf $home/yay
 usrdo yay -S --noconfirm \
    pulseaudio-modules-bt \
    ttf-twemoji \
