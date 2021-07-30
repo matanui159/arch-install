@@ -104,6 +104,7 @@ bindswitch lid:on systemctl suspend
 bar {
    position top
    status_command ~/.config/sway/status.fish
+   tray_output none
    colors {
       # Default colors
       statusline #ffffff
