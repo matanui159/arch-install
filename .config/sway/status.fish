@@ -3,7 +3,7 @@ while true
    set datetime (date '+%A %B %e - %l:%M %P')
    set batfile /sys/class/power_supply/BAT0/capacity
    if test -f $batfile
-      set bat (printf %+3s (cat $batfile))%
+      set bat (printf %3s%% (cat $batfile))
    else
       set bat [PC]
    end
